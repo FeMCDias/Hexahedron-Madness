@@ -93,6 +93,20 @@ class Hexahedron():
         for i in range(8):
         # draw circle for vertices
             pygame.draw.circle(self.window, (255, 255, 255), (self.projection[0][i], self.projection[1][i]), 5)
+        # draw lines for edges of cube
+        # draw lines between every vertex to draw a cube
+        pygame.draw.line(self.window, (255, 255, 255), (self.projection[0][0], self.projection[1][0]), (self.projection[0][1], self.projection[1][1]), 2)
+        pygame.draw.line(self.window, (255, 255, 255), (self.projection[0][0], self.projection[1][0]), (self.projection[0][3], self.projection[1][3]), 2)
+        pygame.draw.line(self.window, (255, 255, 255), (self.projection[0][0], self.projection[1][0]), (self.projection[0][4], self.projection[1][4]), 2)
+        pygame.draw.line(self.window, (255, 255, 255), (self.projection[0][1], self.projection[1][1]), (self.projection[0][2], self.projection[1][2]), 2)
+        pygame.draw.line(self.window, (255, 255, 255), (self.projection[0][1], self.projection[1][1]), (self.projection[0][5], self.projection[1][5]), 2)
+        pygame.draw.line(self.window, (255, 255, 255), (self.projection[0][2], self.projection[1][2]), (self.projection[0][3], self.projection[1][3]), 2)
+        pygame.draw.line(self.window, (255, 255, 255), (self.projection[0][2], self.projection[1][2]), (self.projection[0][6], self.projection[1][6]), 2)
+        pygame.draw.line(self.window, (255, 255, 255), (self.projection[0][3], self.projection[1][3]), (self.projection[0][7], self.projection[1][7]), 2)
+        pygame.draw.line(self.window, (255, 255, 255), (self.projection[0][4], self.projection[1][4]), (self.projection[0][5], self.projection[1][5]), 2)
+        pygame.draw.line(self.window, (255, 255, 255), (self.projection[0][4], self.projection[1][4]), (self.projection[0][7], self.projection[1][7]), 2)        
+
+            
     
 
     def render_screen(self):
@@ -101,46 +115,41 @@ class Hexahedron():
             
     
     def run(self):
-        looping = True
-        # The main game loop
-        print(self.state['cube'])
-        while looping :
-            for event in pygame.event.get() :
-                if event.type == QUIT :
+        while True:
+            for event in pygame.event.get():
+                if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == KEYDOWN:
-                    if event.key == K_a:
-                        self.key_pressed = 'A'
-                    if event.key == K_s:
-                        self.key_pressed = 'S'
-                    if event.key == K_d:
-                        self.key_pressed = 'D'
-                    if event.key == K_z:
-                        self.key_pressed = 'Z'
-                    if event.key == K_x:
-                        self.key_pressed = 'X'
-                    if event.key == K_c:
-                        self.key_pressed = 'C'
-                if event.type == KEYUP:
-                    self.key_pressed = False
-            if self.key_pressed == 'A':
-                self.state['theta_x'] += 0.01
-            if self.key_pressed == 'Z':
-                self.state['theta_x'] -= 0.01
-            if self.key_pressed == 'S':
+
+            keys = pygame.key.get_pressed()
+            if keys[K_ESCAPE]:
+                pygame.quit()
+                sys.exit()
+
+            if keys[K_RIGHT]:
                 self.state['theta_y'] += 0.01
-            if self.key_pressed == 'X':
+
+            if keys[K_LEFT]:
                 self.state['theta_y'] -= 0.01
-            if self.key_pressed == 'D':
-                self.state['theta_z'] += 0.01
-            if self.key_pressed == 'C':
-                self.state['theta_z'] -= 0.01
+
+            if keys[K_UP]:
+                self.state['theta_x'] += 0.01
+
+            if keys[K_DOWN]:
+                self.state['theta_x'] -= 0.01
             
+            if keys[K_w]:
+                self.state['theta_z'] += 0.01
+
+            if keys[K_s]:
+                self.state['theta_z'] -= 0.01
+
             self.update_rx_ry_rz()
-            self.update_cube()
-            self.render_screen()
+            self.update_cube() # update projection values
+            self.draw_cube() # draw cube using updated projection values
+
             pygame.display.update()
+            self.fpsClock.tick(self.FPS)
 
 game = Hexahedron()
 game.run()
