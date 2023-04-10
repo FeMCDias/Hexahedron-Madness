@@ -40,7 +40,7 @@ class Hexahedron():
             'rx': None,
             'ry': None,
             'rz': None,
-            'theta_x': 0.01,
+            'theta_x': 0,
             'theta_y': 0,
             'theta_z': 0,
             'proj': None
@@ -86,7 +86,8 @@ class Hexahedron():
         self.projection = self.rx @ self.ry @ self.rz @ self.state['cube']
         self.projection = self.proj @ self.projection
         self.projection /= self.projection[3]
-        print(self.proj, self.projection)
+        self.projection[2] = [-200, -200, -200, -200, 200, 200, 200, 200]
+        print(self.projection)
 
     def draw_cube(self):
         self.window.fill(self.BACKGROUND)
