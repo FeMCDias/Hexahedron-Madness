@@ -35,14 +35,14 @@ class Hexahedron():
         
         # Identify state
         self.state = {
-            'd': 300,
+            'd': 200,
             'cube': [],
             'rx': None,
             'ry': None,
             'rz': None,
-            'theta_x': 0,
-            'theta_y': 0,
-            'theta_z': 0,
+            'theta_x': 1,
+            'theta_y': 1,
+            'theta_z': 1,
             'proj': None
         }
         self.create_cube()
@@ -50,39 +50,69 @@ class Hexahedron():
         self.window = pygame.display.set_mode((self.window_width, self.window_height))
 
     def create_cube(self):
-        self.state['cube'] = np.array([[1, 1, -1, -1, 1, 1, -1, -1],[1, -1, -1, 1, 1, -1, -1, 1],[1, 1, 1, 1, -1, -1, -1, -1]])
-        self.state['cube'] = self.state['cube'] * self.state['d']
+        self.state['cube'] = np.array([[1, 1, -1, -1, 1, 1, -1, -1], 
+                                       [1, -1, -1, 1, 1, -1, -1, 1],
+                                       [-1, -1, -1, -1, 1, 1, 1, 1],
+                                       [1, 1, 1, 1, 1, 1, 1, 1]])
+        self.state['cube'][2] += 5
+        self.state['cube'][0] *= 200
+        self.state['cube'][0] += self.window_width//2
+        self.state['cube'][1] *= 200
+        self.state['cube'][1] += self.window_height//2
+
 
     def update_rx_ry_rz(self):
-        self.rx = np.array([[1, 0, 0, 0],[0, np.cos(self.state['theta_x']), -np.sin(self.state['theta_x']), 0],[0, np.sin(self.state['theta_x']), np.cos(self.state['theta_x']), 0],[0, 0, 0, 1]])
-        self.ry = np.array([[np.cos(self.state['theta_y']), 0, np.sin(self.state['theta_y']), 0],[0, 1, 0, 0],[-np.sin(self.state['theta_y']), 0, np.cos(self.state['theta_y']), 0],[0, 0, 0, 1]])
-        self.rz = np.array([[np.cos(self.state['theta_z']), -np.sin(self.state['theta_z']), 0, 0],[np.sin(self.state['theta_z']), np.cos(self.state['theta_z']), 0, 0],[0, 0, 1, 0],[0, 0, 0, 1]])
+        self.rx = np.array([[1, 0, 0, 0],
+                            [0, np.cos(self.state['theta_x']), -np.sin(self.state['theta_x']), 0],
+                            [0, np.sin(self.state['theta_x']), np.cos(self.state['theta_x']), 0],
+                            [0, 0, 0, 1]])
+        self.ry = np.array([[np.cos(self.state['theta_y']), 0, np.sin(self.state['theta_y']), 0],
+                            [0, 1, 0, 0],
+                            [-np.sin(self.state['theta_y']), 0, np.cos(self.state['theta_y']), 0],
+                            [0, 0, 0, 1]])
+        self.rz = np.array([[np.cos(self.state['theta_z']), -np.sin(self.state['theta_z']), 0, 0],
+                            [np.sin(self.state['theta_z']), np.cos(self.state['theta_z']), 0, 0],
+                            [0, 0, 1, 0],
+                            [0, 0, 0, 1]])
 
     def create_projection(self):
-        self.proj = np.array([[1, 0, 0, 0],[0, 1, 0, 0],[0, 0, 0, -self.state['d']],[0, 0, -1/self.state['d'], 0]])
+        self.proj = np.array([[1, 0, 0, 0],
+                              [0, 1, 0, 0],
+                              [0, 0, 0, -self.state['d']],
+                              [0, 0, -1/self.state['d'], 0]])
 
     def update_cube(self):
         self.state['cube'] = self.rx @ self.ry @ self.rz @ self.state['cube']
         self.state['cube'] = self.proj @ self.state['cube']
-        self.state['cube'] = self.state['cube'] / self.state['cube'][3]
+        self.state['cube'] = self.state['cube']/self.state['cube'][3]
+        print(self.state['cube'])
+
+    def draw_cube(self):
+        self.window.fill(self.BACKGROUND)
+        for i in range(8):
+        # draw circle for vertices
+            pygame.draw.circle(self.window, (255, 255, 255), (int(self.state['cube'][0][i]), int(self.state['cube'][1][i])), 7)
+        pygame.display.flip()
+    
 
     def render_screen(self):
         self.fpsClock.tick(self.FPS)
-        pygame.display.update()
+        self.draw_cube()
             
     
     def run(self):
         looping = True
         # The main game loop
+        print(self.state['cube'])
         while looping :
             for event in pygame.event.get() :
                 if event.type == QUIT :
                     pygame.quit()
                     sys.exit()
-            # Render elements of the game
+            self.update_rx_ry_rz()
+            self.update_cube()
             self.render_screen()
             pygame.display.update()
-            self.fpsClock.tick(self.FPS)
 
 game = Hexahedron()
 game.run()
