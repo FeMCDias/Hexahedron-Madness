@@ -40,11 +40,12 @@ class Hexahedron():
             'rx': None,
             'ry': None,
             'rz': None,
-            'theta_x': 1,
-            'theta_y': 1,
-            'theta_z': 1,
+            'theta_x': 0.01,
+            'theta_y': 0,
+            'theta_z': 0,
             'proj': None
         }
+        self.key_pressed = False
         self.create_cube()
         self.create_projection()
         self.window = pygame.display.set_mode((self.window_width, self.window_height))
@@ -54,7 +55,7 @@ class Hexahedron():
                                        [1, -1, -1, 1, 1, -1, -1, 1],
                                        [-1, -1, -1, -1, 1, 1, 1, 1],
                                        [1, 1, 1, 1, 1, 1, 1, 1]])
-        self.state['cube'][2] += 5
+        self.state['cube'][2] *= 200
         self.state['cube'][0] *= 200
         self.state['cube'][0] += self.window_width//2
         self.state['cube'][1] *= 200
@@ -82,17 +83,16 @@ class Hexahedron():
                               [0, 0, -1/self.state['d'], 0]])
 
     def update_cube(self):
-        self.state['cube'] = self.rx @ self.ry @ self.rz @ self.state['cube']
-        self.state['cube'] = self.proj @ self.state['cube']
-        self.state['cube'] = self.state['cube']/self.state['cube'][3]
-        print(self.state['cube'])
+        self.projection = self.rx @ self.ry @ self.rz @ self.state['cube']
+        self.projection = self.proj @ self.projection
+        self.projection /= self.projection[3]
+        print(self.proj, self.projection)
 
     def draw_cube(self):
         self.window.fill(self.BACKGROUND)
         for i in range(8):
         # draw circle for vertices
-            pygame.draw.circle(self.window, (255, 255, 255), (int(self.state['cube'][0][i]), int(self.state['cube'][1][i])), 7)
-        pygame.display.flip()
+            pygame.draw.circle(self.window, (255, 255, 255), (self.projection[0][i], self.projection[1][i]), 5)
     
 
     def render_screen(self):
@@ -109,6 +109,34 @@ class Hexahedron():
                 if event.type == QUIT :
                     pygame.quit()
                     sys.exit()
+                if event.type == KEYDOWN:
+                    if event.key == K_a:
+                        self.key_pressed = 'A'
+                    if event.key == K_s:
+                        self.key_pressed = 'S'
+                    if event.key == K_d:
+                        self.key_pressed = 'D'
+                    if event.key == K_z:
+                        self.key_pressed = 'Z'
+                    if event.key == K_x:
+                        self.key_pressed = 'X'
+                    if event.key == K_c:
+                        self.key_pressed = 'C'
+                if event.type == KEYUP:
+                    self.key_pressed = False
+            if self.key_pressed == 'A':
+                self.state['theta_x'] += 0.01
+            if self.key_pressed == 'Z':
+                self.state['theta_x'] -= 0.01
+            if self.key_pressed == 'S':
+                self.state['theta_y'] += 0.01
+            if self.key_pressed == 'X':
+                self.state['theta_y'] -= 0.01
+            if self.key_pressed == 'D':
+                self.state['theta_z'] += 0.01
+            if self.key_pressed == 'C':
+                self.state['theta_z'] -= 0.01
+            
             self.update_rx_ry_rz()
             self.update_cube()
             self.render_screen()
