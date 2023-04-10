@@ -1,13 +1,14 @@
 import pygame, sys
 from pygame.locals import *
+import numpy as np
 import os
 
-class TaxiGame():
+class Hexahedron():
     def __init__(self):
         pygame.init()
 
         # Set icon
-        icon = pygame.image.load(os.path.join('assets','images','taxi_icon.png'))
+        icon = pygame.image.load(os.path.join('assets','images','cube_icon.jpg'))
         pygame.display.set_icon(icon)
 
         # Set music
@@ -34,9 +35,37 @@ class TaxiGame():
         
         # Identify state
         self.state = {
+            'd': 300,
+            'cube': [],
+            'rx': None,
+            'ry': None,
+            'rz': None,
+            'theta_x': 0,
+            'theta_y': 0,
+            'theta_z': 0,
+            'proj': None
         }
+        self.create_cube()
+        self.create_projection()
         self.window = pygame.display.set_mode((self.window_width, self.window_height))
-                    
+
+    def create_cube(self):
+        self.state['cube'] = np.array([[1, 1, -1, -1, 1, 1, -1, -1],[1, -1, -1, 1, 1, -1, -1, 1],[1, 1, 1, 1, -1, -1, -1, -1]])
+        self.state['cube'] = self.state['cube'] * self.state['d']
+
+    def update_rx_ry_rz(self):
+        self.rx = np.array([[1, 0, 0, 0],[0, np.cos(self.state['theta_x']), -np.sin(self.state['theta_x']), 0],[0, np.sin(self.state['theta_x']), np.cos(self.state['theta_x']), 0],[0, 0, 0, 1]])
+        self.ry = np.array([[np.cos(self.state['theta_y']), 0, np.sin(self.state['theta_y']), 0],[0, 1, 0, 0],[-np.sin(self.state['theta_y']), 0, np.cos(self.state['theta_y']), 0],[0, 0, 0, 1]])
+        self.rz = np.array([[np.cos(self.state['theta_z']), -np.sin(self.state['theta_z']), 0, 0],[np.sin(self.state['theta_z']), np.cos(self.state['theta_z']), 0, 0],[0, 0, 1, 0],[0, 0, 0, 1]])
+
+    def create_projection(self):
+        self.proj = np.array([[1, 0, 0, 0],[0, 1, 0, 0],[0, 0, 0, -self.state['d']],[0, 0, -1/self.state['d'], 0]])
+
+    def update_cube(self):
+        self.state['cube'] = self.rx @ self.ry @ self.rz @ self.state['cube']
+        self.state['cube'] = self.proj @ self.state['cube']
+        self.state['cube'] = self.state['cube'] / self.state['cube'][3]
+
     def render_screen(self):
         self.fpsClock.tick(self.FPS)
         pygame.display.update()
@@ -55,5 +84,5 @@ class TaxiGame():
             pygame.display.update()
             self.fpsClock.tick(self.FPS)
 
-game = TaxiGame()
+game = Hexahedron()
 game.run()
