@@ -81,7 +81,8 @@ $$
     X0 = Xp*Wp
 $$
 
-    - 2.3 Basta fazer o mesmo processo para descobrirmos o valor de Y0:
+- 2.3 Basta fazer o mesmo processo para descobrirmos o valor de Y0:
+
     $$ Y0 = Yp*Wp $$
 
 3. Descobrir o valor da matriz P:
@@ -90,7 +91,9 @@ $$
         - XpWp: X0
         - YpWp: Y0
         - Wp: 
-        $ \frac {Y0}{Yp} $
+
+$ \frac {Y0}{Yp} $
+
         - Zp: -d
 
     - A partir desses valores, podemos montar a matriz P:
