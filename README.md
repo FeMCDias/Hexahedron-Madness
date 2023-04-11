@@ -41,6 +41,7 @@ Referência: https://github.com/LuccaHiratsuca/Enigma
 
 ## Modelo Matemático
 
+![](assets/images/image.jpeg)
 
 Onde:
 - (X0Y0) = Posição do Objeto
@@ -279,5 +280,6 @@ $$
 Projecao = Transformacao @ Cube
 $$
 
-## Tabela com funcionalidades
+### Observações
+- Alterar o zoom, simplesmente altera a distância focal, fazendo com que o cubo fique mais próximo ou mais distante da tela.
 
