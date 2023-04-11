@@ -10,7 +10,7 @@
 O projeto tem como finalidade o desenvolvimento de um cubo 3D, o qual pode se movimentar em 3 dimensões: X,Y e Z. Esse é projetado a partir de tela 2D e, com a aplicação de rotações utilizando as dimensões, acabamos projetando o cubo tridimensionalmente.
 
 ## GIF do Cubo 3D
-![Cube GIF](assets\cube.gif)
+![cube](assets/cube.gif)
 
 ## Como instalar e rodar o projeto
 Referência: https://github.com/LuccaHiratsuca/Enigma
@@ -54,33 +54,33 @@ A partir da imagem acima e sabendo que a dimensão do eixo Z é fixa, em outras 
     - Com a imagem acima, podemos notar que há 2 triângulos retângulos. E, ambos possuem o angulo &theta; em comum, uma vez que esses são opostos pelo mesmo vértice, assim podemos aplicar a técnica de semelhança de triângulos, assim:
 
         - 1.1
-            $$
+            $
             tangente(\theta) = \frac{x_0}{y_0} = \frac{x_p}{y_p}
-            $$
+            $
             
         - 1.2
-            $$
+            $
             Xp = \frac{x_0*yp}{y_0}
-            $$
+            $
 
 2. Descobrir o valor de X0 e Y0:
 
     - A partir dessa última fórmula, para calcularmos o valor de Xp, é necessário a divisão entre duas matrizes. Para evitar isso, criamos uma nova variável <b> Wp </b> com o intuito de aplicar uma multiplicação matricial. Dessa maneira:
 
         - 2.1 Partindo do valor de Xp:
-        $$
+        $
             Xp = \frac{x_0*yp}{y_0}
-        $$
+        $
         - 2.2 Sabendo que Xp depende apenas de Xo multiplicado por algum número real, obtemos:
-        $$
+        $
             Xp*Wp \rightarrow Wp= \frac {y_0}{y_p}
             \\
             \therefore
             \\
             X0 = Xp*Wp
-        $$
+        $
         - 2.3 Basta fazer o mesmo processo para descobrirmos o valor de Y0:
-        $$ Y0 = Yp*Wp $$
+        $ Y0 = Yp*Wp $
 
 3. Descobrir o valor da matriz P:
 
@@ -92,36 +92,36 @@ A partir da imagem acima e sabendo que a dimensão do eixo Z é fixa, em outras 
         - Zp: -d
 
     - A partir desses valores, podemos montar a matriz P:
-        $$
-        P = 
-        \begin{bmatrix}
-        1 & 0 & 0 \\
-        0 & 0 & -d \\
-        0 & -\frac{1}{d} & 0 \\
-        \end{bmatrix}
-        @
-        \begin{bmatrix}
-        X0 \\
-        Y0 \\
-        1 \\
-        \end{bmatrix}
-        =
-        \begin{bmatrix}
-        Xp * Wp \\
-        Yp \\
-        Wp \\
-        \end{bmatrix}
-        $$
-    - Assim:
-        $$ 
-        P = 
-        \begin{bmatrix}
-        1 & 0 & 0 & 0 \\
-        0 & 1 & 0 & 0 \\
-        0 & 0 & 0 & -d \\
-        0 & 0 & -\frac{1}{d} & 0 \\
-        \end{bmatrix} 
-        $$
+    $$
+    P = 
+    \begin{bmatrix}
+    1 & 0 & 0 \\
+    0 & 0 & -d \\
+    0 & -\frac{1}{d} & 0 \\
+    \end{bmatrix}
+    @
+    \begin{bmatrix}
+    X0 \\
+    Y0 \\
+    1 \\
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+    Xp * Wp \\
+    Yp \\
+    Wp \\
+    \end{bmatrix}
+    $$
+    Assim:
+    $$ 
+    P = 
+    \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 0 & -d \\
+    0 & 0 & -\frac{1}{d} & 0 \\
+    \end{bmatrix} 
+    $$
     
 ## Matrizes utilizadas no projeto
 ### Matriz de projeção Pinhole:
@@ -183,6 +183,8 @@ Rotacao = RX @ RY @ RZ
 \therefore
 \\
 \\
+$$
+$$
 Rotacao =
 \begin{bmatrix}
 1 & 0 & 0 & 0 \\
