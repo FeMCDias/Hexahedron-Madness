@@ -15,7 +15,8 @@ class Cube(object):
         self.screen = screen
         self.cube =  np.array([[-50, -50, -50, 1], [50, -50, -50, 1], [50, 50, -50, 1], [-50, 50, -50, 1], [-50, -50, 50, 1], [50, -50, 50, 1], [50, 50, 50, 1], [-50, 50, 50, 1]]).T
         self.P = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,-self.d],[0,0,-(1/self.d),0]])
-        self.direction = 'right'
+        self.direction = 'none'
+        self.count_rotations = 0
         self.update()
 
     def update(self):
@@ -31,16 +32,23 @@ class Cube(object):
         
         self.projected = self.transformation @ self.cube #Cubo - transformado - aplicar a matriz de transformação
 
-    def change_direction(self,direction = ''):
-        self.direction = direction
-        if self.direction == 'right' or self.direction == '':
-            self.rotation = self.rotation @ self.rx
-        elif self.direction == 'left':
-            self.rotation = self.rotation @ self.ry
-        elif self.direction == 'up':
-            self.rotation = self.rotation @ self.rz
-        elif self.direction == 'down':
-            self.rotation = self.rotation @ self.rx @ self.ry @ self.rz            
+    def change_direction(self):
+        if self.direction != 'none':
+            self.count_rotations += 1
+            if self.count_rotations % 20 ==0:
+                if self.direction == 'right':
+                    self.angleX += np.deg2rad(1)
+                elif self.direction == 'left':
+                    self.angleX -= np.deg2rad(1)
+                elif self.direction == 'up':
+                    self.angleY += np.deg2rad(1)
+                elif self.direction == 'down':
+                    self.angleY -= np.deg2rad(1)
+                elif self.direction == 'z_down':
+                    self.angleZ += np.deg2rad(1)
+                elif self.direction == 'z_up':
+                    self.angleZ -= np.deg2rad(1)
+                print('OK')
 
     def draw_cube(self):
         for i in range(8):
@@ -80,16 +88,23 @@ class Cube(object):
                 if event.type == QUIT:
                     pg.quit()
                     sys.exit()
-
                 if event.type == KEYDOWN:
                     if event.key == K_d:
-                        self.change_direction('right')
+                        self.direction = 'right'
                     if event.key == K_a:
-                        self.change_direction('left')
+                        self.direction = 'left'
                     if event.key == K_w:
-                        self.change_direction('up')
+                        self.direction = 'up'
                     if event.key == K_s:
-                        self.change_direction('down')
+                        self.direction = 'down'
+                    if event.key == K_z:
+                        self.direction = 'z_down'
+                    if event.key == K_x:
+                        self.direction = 'z_up'
+                if event.type == KEYUP:
+                    self.direction = 'none'
+            self.change_direction()
+            self.update()
 
             pg.display.update()
 
