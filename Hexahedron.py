@@ -99,6 +99,12 @@ class Cube(object):
                         self.directions.remove('z_down')
                     if event.key == K_x:
                         self.directions.remove('z_up')
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    # Scroll to Zoom Function
+                    if event.button == 4:
+                        self.d += 5
+                    if event.button == 5:
+                        self.d -= 5
             self.change_direction()
             self.update()
 
