@@ -13,9 +13,13 @@ class Cube(object):
         self.angleZ = np.deg2rad(1)
         self.d = 400  # ajustar o valor para alterar a distância da câmera
         self.screen = screen
-        self.cube =  np.array([[-50, -50, -50, 1], [50, -50, -50, 1], [50, 50, -50, 1], [-50, 50, -50, 1], [-50, -50, 50, 1], [50, -50, 50, 1], [50, 50, 50, 1], [-50, 50, 50, 1]]).T
+        self.cube =  np.array([[-100, -100, -100, 1], [100, -100, -100, 1], [100, 100, -100, 1], [-100, 100, -100, 1], [-100, -100, 100, 1], [100, -100, 100, 1], [100, 100, 100, 1], [-100, 100, 100, 1]]).T
         self.P = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,-self.d],[0,0,-(1/self.d),0]])
-        self.direction = 'right'
+        self.directions = ['none']
+        self.count_rotations = 0
+        self.lines = [(0, 1), (1, 2), (2, 3), (3, 0),
+                      (4, 5), (5, 6), (6, 7), (7, 4),
+                      (0, 4), (1, 5), (2, 6), (3, 7)]
         self.update()
 
     def update(self):
@@ -31,44 +35,31 @@ class Cube(object):
         
         self.projected = self.transformation @ self.cube #Cubo - transformado - aplicar a matriz de transformação
 
-    def change_direction(self,direction = ''):
-        self.direction = direction
-        if self.direction == 'right' or self.direction == '':
-            self.rotation = self.rotation @ self.rx
-        elif self.direction == 'left':
-            self.rotation = self.rotation @ self.ry
-        elif self.direction == 'up':
-            self.rotation = self.rotation @ self.rz
-        elif self.direction == 'down':
-            self.rotation = self.rotation @ self.rx @ self.ry @ self.rz            
+    def change_direction(self):
+        if 'none' not in self.directions:
+            self.count_rotations += 1
+            if self.count_rotations % 20 ==0:
+                if 'right' in self.directions:
+                    self.angleY += np.deg2rad(1)
+                if 'left' in self.directions:
+                    self.angleY -= np.deg2rad(1)
+                if 'up' in self.directions:
+                    self.angleX += np.deg2rad(1)
+                if 'down' in self.directions:
+                    self.angleX -= np.deg2rad(1)
+                if 'z_down' in self.directions:
+                    self.angleZ += np.deg2rad(1)
+                if 'z_up' in self.directions:
+                    self.angleZ -= np.deg2rad(1)
+                print('OK')
 
     def draw_cube(self):
         for i in range(8):
             pg.draw.circle(self.screen, (255, 255, 255), ((self.projected[0][i] / self.projected[3][i]), (self.projected[1][i] / self.projected[3][i])), 5)
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][i] / self.projected[3][i]), (self.projected[1][i] / self.projected[3][i])), ((self.projected[0][(i + 1) % 4] / self.projected[3][(i + 1) % 4]), (self.projected[1][(i + 1) % 4] / self.projected[3][(i + 1) % 4])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][i] / self.projected[3][i]), (self.projected[1][i] / self.projected[3][i])), ((self.projected[0][(i + 4) % 8] / self.projected[3][(i + 4) % 8]), (self.projected[1][(i + 4) % 8] / self.projected[3][(i + 4) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 4) % 8] / self.projected[3][(i + 4) % 8]), (self.projected[1][(i + 4) % 8] / self.projected[3][(i + 4) % 8])), ((self.projected[0][(i + 5) % 8] / self.projected[3][(i + 5) % 8]), (self.projected[1][(i + 5) % 8] / self.projected[3][(i + 5) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 4) % 8] / self.projected[3][(i + 4) % 8]), (self.projected[1][(i + 4) % 8] / self.projected[3][(i + 4) % 8])), ((self.projected[0][(i + 7) % 8] / self.projected[3][(i + 7) % 8]), (self.projected[1][(i + 7) % 8] / self.projected[3][(i + 7) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 7) % 8] / self.projected[3][(i + 7) % 8]), (self.projected[1][(i + 7) % 8] / self.projected[3][(i + 7) % 8])), ((self.projected[0][(i + 6) % 8] / self.projected[3][(i + 6) % 8]), (self.projected[1][(i + 6) % 8] / self.projected[3][(i + 6) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 7) % 8] / self.projected[3][(i + 7) % 8]), (self.projected[1][(i + 7) % 8] / self.projected[3][(i + 7) % 8])), ((self.projected[0][(i + 3) % 8] / self.projected[3][(i + 3) % 8]), (self.projected[1][(i + 3) % 8] / self.projected[3][(i + 3) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 3) % 8] / self.projected[3][(i + 3) % 8]), (self.projected[1][(i + 3) % 8] / self.projected[3][(i + 3) % 8])), ((self.projected[0][(i + 2) % 8] / self.projected[3][(i + 2) % 8]), (self.projected[1][(i + 2) % 8] / self.projected[3][(i + 2) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 3) % 8] / self.projected[3][(i + 3) % 8]), (self.projected[1][(i + 3) % 8] / self.projected[3][(i + 3) % 8])), ((self.projected[0][(i + 0) % 8] / self.projected[3][(i + 0) % 8]), (self.projected[1][(i + 0) % 8] / self.projected[3][(i + 0) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 0) % 8] / self.projected[3][(i + 0) % 8]), (self.projected[1][(i + 0) % 8] / self.projected[3][(i + 0) % 8])), ((self.projected[0][(i + 1) % 8] / self.projected[3][(i + 1) % 8]), (self.projected[1][(i + 1) % 8] / self.projected[3][(i + 1) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 0) % 8] / self.projected[3][(i + 0) % 8]), (self.projected[1][(i + 0) % 8] / self.projected[3][(i + 0) % 8])), ((self.projected[0][(i + 4) % 8] / self.projected[3][(i + 4) % 8]), (self.projected[1][(i + 4) % 8] / self.projected[3][(i + 4) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 1) % 8] / self.projected[3][(i + 1) % 8]), (self.projected[1][(i + 1) % 8] / self.projected[3][(i + 1) % 8])), ((self.projected[0][(i + 5) % 8] / self.projected[3][(i + 5) % 8]), (self.projected[1][(i + 5) % 8] / self.projected[3][(i + 5) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 2) % 8] / self.projected[3][(i + 2) % 8]), (self.projected[1][(i + 2) % 8] / self.projected[3][(i + 2) % 8])), ((self.projected[0][(i + 6) % 8] / self.projected[3][(i + 6) % 8]), (self.projected[1][(i + 6) % 8] / self.projected[3][(i + 6) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 5) % 8] / self.projected[3][(i + 5) % 8]), (self.projected[1][(i + 5) % 8] / self.projected[3][(i + 5) % 8])), ((self.projected[0][(i + 4) % 8] / self.projected[3][(i + 4) % 8]), (self.projected[1][(i + 4) % 8] / self.projected[3][(i + 4) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 4) % 8] / self.projected[3][(i + 4) % 8]), (self.projected[1][(i + 4) % 8] / self.projected[3][(i + 4) % 8])), ((self.projected[0][(i + 6) % 8] / self.projected[3][(i + 6) % 8]), (self.projected[1][(i + 6) % 8] / self.projected[3][(i + 6) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 6) % 8] / self.projected[3][(i + 6) % 8]), (self.projected[1][(i + 6) % 8] / self.projected[3][(i + 6) % 8])), ((self.projected[0][(i + 7) % 8] / self.projected[3][(i + 7) % 8]), (self.projected[1][(i + 7) % 8] / self.projected[3][(i + 7) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 7) % 8] / self.projected[3][(i + 7) % 8]), (self.projected[1][(i + 7) % 8] / self.projected[3][(i + 7) % 8])), ((self.projected[0][(i + 5) % 8] / self.projected[3][(i + 5) % 8]), (self.projected[1][(i + 5) % 8] / self.projected[3][(i + 5) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 7) % 8] / self.projected[3][(i + 7) % 8]), (self.projected[1][(i + 7) % 8] / self.projected[3][(i + 7) % 8])), ((self.projected[0][(i + 3) % 8] / self.projected[3][(i + 3) % 8]), (self.projected[1][(i + 3) % 8] / self.projected[3][(i + 3) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 3) % 8] / self.projected[3][(i + 3) % 8]), (self.projected[1][(i + 3) % 8] / self.projected[3][(i + 3) % 8])), ((self.projected[0][(i + 2) % 8] / self.projected[3][(i + 2) % 8]), (self.projected[1][(i + 2) % 8] / self.projected[3][(i + 2) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 2) % 8] / self.projected[3][(i + 2) % 8]), (self.projected[1][(i + 2) % 8] / self.projected[3][(i + 2) % 8])), ((self.projected[0][(i + 0) % 8] / self.projected[3][(i + 0) % 8]), (self.projected[1][(i + 0) % 8] / self.projected[3][(i + 0) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 0) % 8] / self.projected[3][(i + 0) % 8]), (self.projected[1][(i + 0) % 8] / self.projected[3][(i + 0) % 8])), ((self.projected[0][(i + 1) % 8] / self.projected[3][(i + 1) % 8]), (self.projected[1][(i + 1) % 8] / self.projected[3][(i + 1) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 1) % 8] / self.projected[3][(i + 1) % 8]), (self.projected[1][(i + 1) % 8] / self.projected[3][(i + 1) % 8])), ((self.projected[0][(i + 3) % 8] / self.projected[3][(i + 3) % 8]), (self.projected[1][(i + 3) % 8] / self.projected[3][(i + 3) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 1) % 8] / self.projected[3][(i + 1) % 8]), (self.projected[1][(i + 1) % 8] / self.projected[3][(i + 1) % 8])), ((self.projected[0][(i + 5) % 8] / self.projected[3][(i + 5) % 8]), (self.projected[1][(i + 5) % 8] / self.projected[3][(i + 5) % 8])))
-            pg.draw.line(self.screen, (255, 255, 255), ((self.projected[0][(i + 5) % 8] / self.projected[3][(i + 5) % 8]), (self.projected[1][(i + 5) % 8] / self.projected[3][(i + 5) % 8])), ((self.projected[0][(i + 4) % 8] / self.projected[3][(i + 4) % 8]), (self.projected[1][(i + 4) % 8] / self.projected[3][(i + 4) % 8])))
-
+        for a, b in self.lines:
+            p1 = (self.projected[0][a] / self.projected[3][a], self.projected[1][a] / self.projected[3][a])
+            p2 = (self.projected[0][b] / self.projected[3][b], self.projected[1][b] / self.projected[3][b])
+            pg.draw.line(self.screen, (255, 255, 255), p1, p2)
 
     def run(self):
         while True:
@@ -80,16 +71,42 @@ class Cube(object):
                 if event.type == QUIT:
                     pg.quit()
                     sys.exit()
-
                 if event.type == KEYDOWN:
+                    if 'none' in self.directions:
+                        self.directions.remove('none')
                     if event.key == K_d:
-                        self.change_direction('right')
+                        self.directions.append('right')
                     if event.key == K_a:
-                        self.change_direction('left')
+                        self.directions.append('left')
                     if event.key == K_w:
-                        self.change_direction('up')
+                        self.directions.append('up')
                     if event.key == K_s:
-                        self.change_direction('down')
+                        self.directions.append('down')
+                    if event.key == K_z:
+                        self.directions.append('z_down')
+                    if event.key == K_x:
+                        self.directions.append('z_up')
+                if event.type == KEYUP:
+                    if event.key == K_d:
+                        self.directions.remove('right')
+                    if event.key == K_a:
+                        self.directions.remove('left')
+                    if event.key == K_w:
+                        self.directions.remove('up')
+                    if event.key == K_s:
+                        self.directions.remove('down')
+                    if event.key == K_z:
+                        self.directions.remove('z_down')
+                    if event.key == K_x:
+                        self.directions.remove('z_up')
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    # Scroll to Zoom Function
+                    if event.button == 4:
+                        self.d += 5
+                    if event.button == 5:
+                        self.d -= 5
+            self.change_direction()
+            self.update()
 
             pg.display.update()
 
