@@ -101,7 +101,6 @@ $$ \frac {Y0}{Yp} $$
 - A partir desses valores, podemos montar a matriz P:
 
 $$
-
 P = 
 \begin{bmatrix}
 1 & 0 & 0 \\
@@ -136,7 +135,6 @@ $$
 ### Matriz de projeção Pinhole:
 
 $$ 
-
 Pinhole = 
 \begin{bmatrix}
 1 & 0 & 0 & 0 \\
