@@ -106,19 +106,11 @@ P =
 1 & 0 & 0 \\
 0 & 0 & -d \\
 0 & -\frac{1}{d} & 0 \\
-\end{bmatrix}
-
-@
-
-\begin{bmatrix}
+\end{bmatrix} @ \begin{bmatrix}
 X0 \\
 Y0 \\
 1 \\
-\end{bmatrix}
-
-=
-
-\begin{bmatrix}
+\end{bmatrix} = \begin{bmatrix}
 Xp * Wp \\
 Yp \\
 Wp \\
