@@ -91,13 +91,14 @@ $$
 
 - Com as fórmulas obtidas até o momento, temos:
 
+    - Zp: -d
     - XpWp: X0
     - YpWp: Y0
     - Wp: 
-$ \frac {Y0}{Yp} $
-    - Zp: -d
+$$ \frac {Y0}{Yp} $$
 
 - A partir desses valores, podemos montar a matriz P:
+
 $$
 P = 
 \begin{bmatrix}
