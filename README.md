@@ -83,20 +83,21 @@ $$
 
 - 2.3 Basta fazer o mesmo processo para descobrirmos o valor de Y0:
 
-    $$ Y0 = Yp*Wp $$
+$$ 
+Y0 = Yp*Wp 
+$$
 
 3. Descobrir o valor da matriz P:
 
-    - Com as fórmulas obtidas até o momento, temos:
-        - XpWp: X0
-        - YpWp: Y0
-        - Wp: 
+- Com as fórmulas obtidas até o momento, temos:
 
+    - XpWp: X0
+    - YpWp: Y0
+    - Wp: 
 $ \frac {Y0}{Yp} $
+    - Zp: -d
 
-        - Zp: -d
-
-    - A partir desses valores, podemos montar a matriz P:
+- A partir desses valores, podemos montar a matriz P:
 $$
 P = 
 \begin{bmatrix}
