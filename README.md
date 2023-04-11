@@ -54,9 +54,9 @@ A partir da imagem acima e sabendo que a dimensão do eixo Z é fixa, em outras 
     - Com a imagem acima, podemos notar que há 2 triângulos retângulos. E, ambos possuem o angulo &theta; em comum, uma vez que esses são opostos pelo mesmo vértice, assim podemos aplicar a técnica de semelhança de triângulos, assim:
 
         - 1.1
-            $
+            $$
             tangente(\theta) = \frac{x_0}{y_0} = \frac{x_p}{y_p}
-            $
+            $$
             
         - 1.2
             $
