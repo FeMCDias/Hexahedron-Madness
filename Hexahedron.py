@@ -3,11 +3,16 @@ import sys
 from pygame.locals import *
 import numpy as np
 import math
-
+import os
 from main import main
 
 class Cube(object):
     def __init__(self,screen) -> None:
+        self.assets = {
+            'Keys_Info': pg.image.load(os.path.join('assets','images','Keys-Info.png')),
+            'Scroll_Info': pg.image.load(os.path.join('assets','images','SCROLL-Info.png')),
+            'WASDZX_Info': pg.image.load(os.path.join('assets','images','WASDZX-Info.png')),
+        }
         self.angleX = np.deg2rad(1)
         self.angleY = np.deg2rad(1) 
         self.angleZ = np.deg2rad(1)
@@ -51,7 +56,6 @@ class Cube(object):
                     self.angleZ += np.deg2rad(1)
                 if 'z_up' in self.directions:
                     self.angleZ -= np.deg2rad(1)
-                print('OK')
 
     def draw_cube(self):
         for i in range(8):
@@ -61,10 +65,17 @@ class Cube(object):
             p2 = (self.projected[0][b] / self.projected[3][b], self.projected[1][b] / self.projected[3][b])
             pg.draw.line(self.screen, (255, 255, 255), p1, p2)
 
+    def draw_info(self):
+        self.screen.blit(self.assets['WASDZX_Info'], (10, 0))
+        self.screen.blit(self.assets['Scroll_Info'], (10, 180))
+        self.screen.blit(self.assets['Keys_Info'], (10, 520))
+
+    
     def run(self):
         while True:
             self.screen.fill((0, 0, 0))
             self.draw_cube()
+            self.draw_info()
             # self.change_direction()
             
             for event in pg.event.get():
