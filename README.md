@@ -121,7 +121,9 @@ Yp \\
 Wp \\
 \end{bmatrix}
 $$
+
 Assim:
+
 $$ 
 P = 
 \begin{bmatrix}
@@ -230,6 +232,7 @@ Tz =
 0 & 0 & 0 & 1 \\
 \end{bmatrix}
 $$
+
 Onde:
 - d = distância focal
 
