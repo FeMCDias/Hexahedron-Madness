@@ -98,7 +98,7 @@ $$
 
 $$ \frac {Y0}{Yp} $$
 
-A partir desses valores, podemos montar a matriz P:
+- A partir desses valores, podemos montar a matriz P:
 
 $$
 P = 
