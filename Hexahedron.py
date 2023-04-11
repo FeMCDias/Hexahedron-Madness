@@ -16,12 +16,14 @@ class Cube(object):
         self.angleX = np.deg2rad(1)
         self.angleY = np.deg2rad(1) 
         self.angleZ = np.deg2rad(1)
-        self.d = 400  # ajustar o valor para alterar a distância da câmera
+        self.d = 400  # Ajustar o valor para alterar a distância da câmera - Focal Length
         self.screen = screen
         self.cube =  np.array([[-100, -100, -100, 1], [100, -100, -100, 1], [100, 100, -100, 1], [-100, 100, -100, 1], [-100, -100, 100, 1], [100, -100, 100, 1], [100, 100, 100, 1], [-100, 100, 100, 1]]).T
         self.P = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,-self.d],[0,0,-(1/self.d),0]])
+        # The following list indicates which rotations are taking place
         self.directions = ['none']
         self.count_rotations = 0
+        # The following list indicates which lines will be drawn (ex. Point 0 to 1...)
         self.lines = [(0, 1), (1, 2), (2, 3), (3, 0),
                       (4, 5), (5, 6), (6, 7), (7, 4),
                       (0, 4), (1, 5), (2, 6), (3, 7)]
@@ -42,6 +44,8 @@ class Cube(object):
 
     def change_direction(self):
         if 'none' not in self.directions:
+            # This count is used to control the speed of rotation
+            # Since events are quickly fired, we need to control the speed of rotation
             self.count_rotations += 1
             if self.count_rotations % 20 ==0:
                 if 'right' in self.directions:
@@ -76,13 +80,14 @@ class Cube(object):
             self.screen.fill((0, 0, 0))
             self.draw_cube()
             self.draw_info()
-            # self.change_direction()
             
             for event in pg.event.get():
                 if event.type == QUIT:
                     pg.quit()
                     sys.exit()
                 if event.type == KEYDOWN:
+                    # Adds the key to the list of keys being pressed
+                    # Ex. If two keys are pressed the list will be ['Key1', 'Key2']
                     if 'none' in self.directions:
                         self.directions.remove('none')
                     if event.key == K_d:
@@ -98,6 +103,7 @@ class Cube(object):
                     if event.key == K_x:
                         self.directions.append('z_up')
                 if event.type == KEYUP:
+                    # Removes Keys from Pressed List If Released
                     if event.key == K_d:
                         self.directions.remove('right')
                     if event.key == K_a:
