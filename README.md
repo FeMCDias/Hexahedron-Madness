@@ -100,6 +100,7 @@ $$ \frac {Y0}{Yp} $$
 
 - A partir desses valores, podemos montar a matriz P:
 
+
 $$
 P = 
 \begin{bmatrix}
@@ -219,6 +220,7 @@ sin(\theta) & cos(\theta) & 0 & 0 \\
 $$
 
 ### Matriz de translação
+
 $$
 Tz = 
 \begin{bmatrix}
