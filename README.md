@@ -65,27 +65,27 @@ A partir da imagem acima e sabendo que a dimensão do eixo Z é fixa, em outras 
 
     - A partir dessa última fórmula, para calcularmos o valor de Xp, é necessário a divisão entre duas matrizes. Para evitar isso, criamos uma nova variável <b> Wp </b> com o intuito de aplicar uma multiplicação matricial. Dessa maneira:
 
-- 2.1 Partindo do valor de Xp:
+    - 2.1 Partindo do valor de Xp:
 
-$$
-    Xp = \frac{x_0*yp}{y_0}
-$$
+    $$
+        Xp = \frac{x_0*yp}{y_0}
+    $$
 
-- 2.2 Sabendo que Xp depende apenas de Xo multiplicado por algum número real, obtemos:
+    - 2.2 Sabendo que Xp depende apenas de Xo multiplicado por algum número real, obtemos:
 
-$$
-    Xp*Wp \rightarrow Wp= \frac {y_0}{y_p}
-    \\
-    \therefore
-    \\
-    X0 = Xp*Wp
-$$
+    $$
+        Xp*Wp \rightarrow Wp= \frac {y_0}{y_p}
+        \\
+        \therefore
+        \\
+        X0 = Xp*Wp
+    $$
 
-- 2.3 Basta fazer o mesmo processo para descobrirmos o valor de Y0:
+    - 2.3 Basta fazer o mesmo processo para descobrirmos o valor de Y0:
 
-$$ 
-Y0 = Yp*Wp 
-$$
+    $$ 
+    Y0 = Yp*Wp 
+    $$
 
 3. Descobrir o valor da matriz P:
 
