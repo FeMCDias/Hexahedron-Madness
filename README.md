@@ -95,11 +95,13 @@ $$
     - XpWp: X0
     - YpWp: Y0
     - Wp: 
+
 $$ \frac {Y0}{Yp} $$
 
 - A partir desses valores, podemos montar a matriz P:
 
 $$
+
 P = 
 \begin{bmatrix}
 1 & 0 & 0 \\
@@ -132,7 +134,9 @@ $$
     
 ## Matrizes utilizadas no projeto
 ### Matriz de projeção Pinhole:
+
 $$ 
+
 Pinhole = 
 \begin{bmatrix}
 1 & 0 & 0 & 0 \\
@@ -141,6 +145,7 @@ Pinhole =
 0 & 0 & -\frac{1}{d} & 0 \\
 \end{bmatrix} 
 $$
+
 Onde:
 -d = distância focal
 
