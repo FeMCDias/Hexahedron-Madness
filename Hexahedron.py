@@ -3,20 +3,27 @@ import sys
 from pygame.locals import *
 import numpy as np
 import math
-
+import os
 from main import main
 
 class Cube(object):
     def __init__(self,screen) -> None:
+        self.assets = {
+            'Keys_Info': pg.image.load(os.path.join('assets','images','Keys-Info.png')),
+            'Scroll_Info': pg.image.load(os.path.join('assets','images','SCROLL-Info.png')),
+            'WASDZX_Info': pg.image.load(os.path.join('assets','images','WASDZX-Info.png')),
+        }
         self.angleX = np.deg2rad(1)
         self.angleY = np.deg2rad(1) 
         self.angleZ = np.deg2rad(1)
-        self.d = 400  # ajustar o valor para alterar a distância da câmera
+        self.d = 400  # Ajustar o valor para alterar a distância da câmera - Focal Length
         self.screen = screen
         self.cube =  np.array([[-100, -100, -100, 1], [100, -100, -100, 1], [100, 100, -100, 1], [-100, 100, -100, 1], [-100, -100, 100, 1], [100, -100, 100, 1], [100, 100, 100, 1], [-100, 100, 100, 1]]).T
         self.P = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,-self.d],[0,0,-(1/self.d),0]])
+        # The following list indicates which rotations are taking place
         self.directions = ['none']
         self.count_rotations = 0
+        # The following list indicates which lines will be drawn (ex. Point 0 to 1...)
         self.lines = [(0, 1), (1, 2), (2, 3), (3, 0),
                       (4, 5), (5, 6), (6, 7), (7, 4),
                       (0, 4), (1, 5), (2, 6), (3, 7)]
@@ -37,6 +44,8 @@ class Cube(object):
 
     def change_direction(self):
         if 'none' not in self.directions:
+            # This count is used to control the speed of rotation
+            # Since events are quickly fired, we need to control the speed of rotation
             self.count_rotations += 1
             if self.count_rotations % 20 ==0:
                 if 'right' in self.directions:
@@ -51,7 +60,6 @@ class Cube(object):
                     self.angleZ += np.deg2rad(1)
                 if 'z_up' in self.directions:
                     self.angleZ -= np.deg2rad(1)
-                print('OK')
 
     def draw_cube(self):
         for i in range(8):
@@ -61,17 +69,25 @@ class Cube(object):
             p2 = (self.projected[0][b] / self.projected[3][b], self.projected[1][b] / self.projected[3][b])
             pg.draw.line(self.screen, (255, 255, 255), p1, p2)
 
+    def draw_info(self):
+        self.screen.blit(self.assets['WASDZX_Info'], (10, 0))
+        self.screen.blit(self.assets['Scroll_Info'], (10, 180))
+        self.screen.blit(self.assets['Keys_Info'], (10, 520))
+
+    
     def run(self):
         while True:
             self.screen.fill((0, 0, 0))
             self.draw_cube()
-            # self.change_direction()
+            self.draw_info()
             
             for event in pg.event.get():
                 if event.type == QUIT:
                     pg.quit()
                     sys.exit()
                 if event.type == KEYDOWN:
+                    # Adds the key to the list of keys being pressed
+                    # Ex. If two keys are pressed the list will be ['Key1', 'Key2']
                     if 'none' in self.directions:
                         self.directions.remove('none')
                     if event.key == K_d:
@@ -87,6 +103,7 @@ class Cube(object):
                     if event.key == K_x:
                         self.directions.append('z_up')
                 if event.type == KEYUP:
+                    # Removes Keys from Pressed List If Released
                     if event.key == K_d:
                         self.directions.remove('right')
                     if event.key == K_a:
